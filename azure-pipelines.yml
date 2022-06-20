@@ -1,0 +1,25 @@
+
+trigger:
+# Deliver snapshot versions from main.
+- main
+# Deliver release versions from release.
+- release
+
+pr:
+# Run test for pull request on main.
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+resources:
+  repositories:
+    - repository: pipeline
+      type: git
+      name: DevOps/PipelineScripts
+
+extends:
+  template: pipeline.yml@pipeline
+  parameters:
+    language: java
+    packaging: library
