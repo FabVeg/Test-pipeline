@@ -39,8 +39,6 @@ stages:
       condition: and(succeeded(), eq(variables.isPullRequest, 'true'))
       jobs:
         - template: java/test.yml
-          parameters:
-            artifactsFeeds: ${{parameters.artifactsFeeds}}
     - stage: Quality
       dependsOn: Initialize
       condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
