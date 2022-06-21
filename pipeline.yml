@@ -38,19 +38,19 @@ stages:
       dependsOn: Initialize
       condition: and(succeeded(), eq(variables.isPullRequest, 'true'))
       jobs:
-        - template: ${{parameters.language}}/test.yml
+        - template: java/test.yml
           parameters:
             artifactsFeeds: ${{parameters.artifactsFeeds}}
     - stage: Quality
       dependsOn: Initialize
       condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
       jobs:
-        - template: ${{parameters.language}}/quality.yml
+        - template: java/quality.yml
     - stage: Deliver
       dependsOn: Initialize
       condition: and(succeeded(), eq(variables.isPullRequest, 'false'))
       jobs:
-        - template: ${{parameters.language}}/deliver.yml
+        - template: java/deliver.yml
           parameters:
             packaging: ${{parameters.packaging}}
             artifactsFeeds: ${{parameters.artifactsFeeds}}
