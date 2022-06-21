@@ -1,0 +1,58 @@
+parameters:
+  - name: language
+    type: string
+    values:
+        - java
+        - python
+  - name: packaging
+    type: string
+    values:
+        - library
+        - docker
+  - name: artifactsFeeds
+    type: string
+    default: 'DIN-SSDE'
+  - name: containerRegistry
+    type: string
+    default: ''
+  - name: imageName
+    type: string
+    default: ''
+
+variables:
+  - name: isPullRequest
+    value: $[eq(variables['Build.Reason'], 'PullRequest')]
+  - name: isMainBranch
+    value: $[eq(variables['Build.SourceBranchName'], 'main')]
+
+stages: 
+    - stage: Initialize
+      jobs:
+        - job: showVars
+          steps:
+            - script: |
+                echo $(isPullRequest)
+                echo $(Build.SourceBranchName)
+                echo $(isMainBranch)
+    - stage: Test
+      dependsOn: Initialize
+      condition: and(succeeded(), eq(variables.isPullRequest, 'true'))
+      jobs:
+        - template: ${{parameters.language}}/test.yml
+          parameters:
+            artifactsFeeds: ${{parameters.artifactsFeeds}}
+    - stage: Quality
+      dependsOn: Initialize
+      condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+      jobs:
+        - template: ${{parameters.language}}/quality.yml
+    - stage: Deliver
+      dependsOn: Initialize
+      condition: and(succeeded(), eq(variables.isPullRequest, 'false'))
+      jobs:
+        - template: ${{parameters.language}}/deliver.yml
+          parameters:
+            packaging: ${{parameters.packaging}}
+            artifactsFeeds: ${{parameters.artifactsFeeds}}
+            containerRegistry: ${{parameters.containerRegistry}}
+            imageName: ${{parameters.imageName}}

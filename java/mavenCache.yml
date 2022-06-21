@@ -1,0 +1,13 @@
+parameters:
+  - name: repositoryFolder
+    type: string
+    default: /home/vsts/.m2/repository
+
+steps:
+  - task: Cache@2
+    inputs:
+      key: '"mavenRepository" | "$(Agent.JobName)"'
+      restoreKeys: |
+          "mavenRepository"
+      path: "/home/vsts/.m2/repository"
+    name: cacheMaven
