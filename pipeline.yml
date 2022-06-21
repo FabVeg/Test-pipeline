@@ -51,8 +51,4 @@ stages:
       condition: and(succeeded(), eq(variables.isPullRequest, 'false'))
       jobs:
         - template: java/deliver.yml
-          parameters:
-            packaging: ${{parameters.packaging}}
-            artifactsFeeds: ${{parameters.artifactsFeeds}}
-            containerRegistry: ${{parameters.containerRegistry}}
-            imageName: ${{parameters.imageName}}
+          
