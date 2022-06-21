@@ -1,8 +1,0 @@
-
-variables:
-  - name: isPullRequest
-    value: $[eq(variables['Build.Reason'], 'PullRequest')]
-  - name: isRelease
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/release')]
-  - name: mavenOpts
-    value: "-B"
